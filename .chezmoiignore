@@ -1,0 +1,9 @@
+README.md
+LICENSE
+
+# Work-specific files only on work machines
+{{ if not .is_work }}
+work/**
+.config/gitconfig/work
+.ie
+{{ end }}

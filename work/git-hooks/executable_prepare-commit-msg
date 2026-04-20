@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Get repository origin URL
+REPO_URL=$(git config --get remote.origin.url)
+
+# Only proceed if the URL contains indexengines.com
+if [[ "$REPO_URL" == *"indexengines.com"* ]]; then
+  # Get the current branch name
+  BRANCH_NAME=$(git symbolic-ref --short HEAD)
+
+  # Read the commit message file
+  COMMIT_MSG_FILE=$1
+  COMMIT_MSG=$(cat $COMMIT_MSG_FILE)
+
+  # Add the branch name to the top of the commit message if not already there
+  if ! grep -q "^branch: $BRANCH_NAME" "$COMMIT_MSG_FILE"; then
+    echo "branch: $BRANCH_NAME" > temp_commit_msg
+    echo "" >> temp_commit_msg
+    echo "$COMMIT_MSG" >> temp_commit_msg
+    cat temp_commit_msg > "$COMMIT_MSG_FILE"
+    rm temp_commit_msg
+  fi
+fi

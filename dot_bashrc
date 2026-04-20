@@ -1,0 +1,145 @@
+##############################################
+# matzxrr bash
+# ############################################
+
+default_username='matzxrr'
+
+# Not a ZSH script
+if [[ -n "$ZSH_VERSION" ]]; then
+    return 1 2> /dev/null || exit 1;
+fi;
+
+# Load Work cmds
+IE="$HOME/.ie"
+if [ -f "$IE" ]; then
+    . "$IE"
+fi
+unset IE
+
+# Setup Glyphs
+USER_ICON=''
+PENGUIN_ICON=''
+FOLDER_ICON=''
+SERVER_ICON=''
+GIT_ICON=''
+MULTI_FIRST='╭─'
+MULTI_LAST='╰'
+MACHINE=$PENGUIN_ICON
+
+set_prompts() {
+
+    local black="" blue="" bold="" cyan="" green="" orange="" \
+          purple="" red="" reset="" white="" yellow=""
+
+    if [ -x /usr/bin/tput ] && tput setaf 1 &> /dev/null; then
+
+        tput sgr0
+
+        bold=$(tput bold)
+        reset=$(tput sgr0)
+
+        black=$(tput setaf 000)
+        red=$(tput setaf 001)
+        green=$(tput setaf 002)
+        yellow=$(tput setaf 003)
+        blue=$(tput setaf 004)
+        purple=$(tput setaf 005)
+        teal=$(tput setaf 006)
+        silver=$(tput setaf 007)
+        charcoal=$(tput setaf 008)
+
+    else
+
+        bold=""
+        reset="\e[0m"
+
+        black="\e[1;000m"
+        red="\e[1;001m"
+        green="\e[1;002m"
+        yellow="\e[1;003m"
+        blue="\e[1;004m"
+        purple="\e[1;005m"
+        teal="\e[1;006m"
+        silver="\e[1;007m"
+        charcoal="\e[1;008m"
+
+    fi
+
+    function usernamehost() {
+
+        userhost="${silver}$MULTI_FIRST"
+        userhost+="${yellow} $MACHINE $USER "
+        userhost+="${teal}at "
+        userhost+="${purple}$SERVER_ICON $HOSTNAME "
+        userhost+="${teal}in"
+
+        homeuser="${silver}$MULTI_FIRST"
+        homeuser+="${yellow} $MACHINE $default_username "
+
+        if [ $USER != "$default_username" ]; then
+            echo $userhost "";
+        else
+            echo $homeuser "";
+        fi
+    }
+
+    function prompt_git() {
+        git rev-parse --is-inside-work-tree &>/dev/null || return
+
+        branchName="$(git symbolic-ref HEAD 2>/dev/null)" || branchName="(unnamed branch)"
+        branchName=${branchName##refs/heads/}
+
+        if [[ -n $(git status --porcelain) ]]; then
+            dirty="*";
+        fi
+
+        echo "${1}$GIT_ICON ${branchName}${2}$dirty";
+
+        return
+    }
+
+    PS1="\[\033]0;\w\007\]"
+    PS1+="\n\[$bold\]"
+    PS1+="\[$(usernamehost)\]"
+    PS1+="\[$red\]$FOLDER_ICON \w"
+    PS1+="\$(prompt_git \"$teal on $yellow\" \"$cyan\")"
+    if type prompt_ie_git &>/dev/null; then
+        PS1+="\$(prompt_ie_git \"$charcoal\")"
+    fi
+    PS1+="\n"
+    PS1+="\[$silver\]$MULTI_LAST \[$reset\]"
+
+    export PS1
+    export PS2="\[$red\] \[$reset\]"
+
+}
+
+# ----------------------------------------------------------------------
+# | Path Updates                                                       |
+# ----------------------------------------------------------------------
+export PATH=/opt/diff-so-fancy:$PATH
+export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:/usr/local/go/bin"
+export PATH="$PATH:$HOME/go/bin"
+
+export EDITOR=hx
+export HELIX_RUNTIME="$HOME/helix/runtime"
+export GPG_TTY=$(tty)
+
+set_prompts
+unset set_prompts
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+RUSTUP="$HOME/.cargo/env"
+if [ -f "$RUSTUP" ]; then
+    . "$RUSTUP"
+fi
+unset RUSTUP
+
+## My Aliases
+alias k=kubectl
+alias gitprune="git remote prune origin"
+alias gitbranchd="git branch -vv | grep ': gone]' | awk '{print \$1}' | xargs git branch -d"

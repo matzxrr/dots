@@ -1,0 +1,105 @@
+# https://alacritty.org/config-alacritty.html - Version 0.14.0
+
+###############################################################################
+# GENERAL
+###############################################################################
+
+[general]
+import = ["./catppuccin-mocha.toml"]
+working_directory = "None"
+live_config_reload = true
+ipc_socket = true
+
+###############################################################################
+# ENV
+###############################################################################
+
+[env]
+TERM = "alacritty"
+WINIT_X11_SCALE_FACTOR = "1.0"
+
+###############################################################################
+# WINDOW
+###############################################################################
+
+[window]
+dimensions = { columns = 0, lines = 0 }
+position = "None"
+padding = { x = 4, y = 5 }
+dynamic_padding = false
+decorations = "Full"
+opacity = 1.0
+blur = false
+startup_mode = "Windowed"
+title = "Alacritty"
+dynamic_title = true
+class = { instance = "Alacritty", general = "Alacritty" }
+resize_increments = false
+option_as_alt = "None"
+
+###############################################################################
+# SCROLLING
+###############################################################################
+
+[scrolling]
+history = 50000
+multiplier = 3
+
+###############################################################################
+# FONT
+###############################################################################
+
+[font]
+normal = { family = "MonaspiceNe NFM", style = "Regular" }
+bold = { family = "MonaspiceNe NFM", style = "Bold" }
+italic = { family = "MonaspiceRn NFM", style = "Italic" }
+bold_italic = { family = "MonaspiceRn NFM", style = "Bold Italic" }
+size = 12.0
+offset = { x = 0, y = 0 }
+glyph_offset = { x = 0, y = 0 }
+builtin_box_drawing = true
+
+###############################################################################
+# BELL
+###############################################################################
+
+[bell]
+animation = "Linear"
+duration = 0
+color = "#ffffff"
+command = "None"
+
+###############################################################################
+# SELECTION
+###############################################################################
+
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+save_to_clipboard = false
+
+###############################################################################
+# CURSOR
+###############################################################################
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+vi_mode_style = { shape = "Beam", blinking = "On" }
+blink_interval = 750
+blink_timeout = 5
+unfocused_hollow = true
+thickness = 0.15
+
+###############################################################################
+# TERMINAL
+###############################################################################
+
+[terminal]
+shell = { program = "C:\\Windows\\System32\\wsl.exe", args = ["--cd ~"] }
+osc52 = "OnlyCopy"
+
+###############################################################################
+# MOUSE
+###############################################################################
+
+[mouse]
+hide_when_typing = false

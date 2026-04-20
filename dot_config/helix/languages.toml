@@ -1,0 +1,291 @@
+# Disable Broken Grammars
+use-grammars = { except = [ "hare", "wren", "gemini" ] }
+
+# LSP Definition --------------------------------------------------------------
+
+[language-server.biome-lsp]
+command = "npx"
+args = ["biome","lsp-proxy"]
+
+[language-server.tailwindcss-language-server]
+command = "tailwindcss-language-server"
+args = ["--stdio"]
+
+[language-server.gopls]
+command = "gopls"
+
+[language-server.golangci-list-lsp]
+command = "gloangci-lint-langserver"
+
+[language-server.yaml-language-server]
+command = "yaml-language-server"
+args = ["--stdio"]
+
+[language-server.rust-analyzer]
+command = "rust-analyzer"
+
+[language-server.vscode-css-language-server]
+command = "vscode-css-language-server"
+args = ["--stdio"]
+
+[language-server.jsonls]
+command = "vscode-json-language-server"
+args = ["--stdio"]
+
+[language-server.eslint]
+command = "vscode-eslint-language-server"
+args = ["--stdio"]
+
+[language-server.typescript-language-server]
+command = "typescript-language-server"
+args = ["--stdio"]
+config.hostInfo = "helix"
+
+[language-server.taplo]
+command = "taplo"
+args = ["lsp", "stdio"]
+
+[language-server.protols]
+command = "protols"
+args = []
+
+[language-server.buf]
+command = "buf"
+args = ["beta", "lsp", "--timeout", "0"]
+
+[language-server.pbkit]
+command = "pb"
+args = ["lsp"]
+
+[language-server.bazel-lsp]
+command = "bazel-lsp"
+args = []
+
+# LSP Config ------------------------------------------------------------------
+
+[language-server.gopls.config]
+env = { GOPACKAGESDRIVER = './tools/gopackagesdriver.sh' }
+workspaceFiles = ["**/BUILD", "**/WORKSPACE", "**/*.{bzl,bazel}"]
+gofumpt     = true
+staticcheck = true
+local = "github.com/my/mypkg"
+directoryFilters = ["-bazel-bin","-bazel-out","-bazel-testlogs","-bazel-mypkg"]
+usePlaceholders = true
+semanticTokens = true
+codelenses = {gc_details=false, generate=false, regenerate_cgo=false, tidy=false, upgrade_dependency=false, vendor=false}
+
+[language-server.gopls.config.hints]
+assignVariableTypes = false
+compositeLiteralFields = false
+constantValues = true
+functionTypeParameters = false
+parameterNames = false
+rangeVariableTypes = false
+
+[language-server.golangci-lint-lsp.config]
+command = [
+  "golangci-lint",
+  "run",
+  "--out-format",
+  "json",
+  "--issues-exit-code=1"
+]
+
+[language-server.yaml-language-server.config.yaml]
+format = { enable = false }
+validation = true
+
+[language-server.rust-analyzer.config]
+inlayHints = { parameterHints = { enable = false } }
+check = { command = "clippy", features = "all" }
+diagnostics = { experimental = { enable = true } }
+hover = { actions = { enable = true } }
+typing = { autoClosingAngleBrackets = { enable = true } }
+cargo = { allFeatures = true }
+procMacro = { enable = true }
+
+[language-server.vscode-css-language-server.config]
+css = { validate = { enable = true } }
+scss = { validate = { enable = true } }
+less = { validate = { enable = true } }
+provideFormatter = true
+
+[language-server.jsonls.config]
+provideFormatter = true
+
+[language-server.jsonls.config.json]
+validate = { enable = true }
+format = { enable = true }
+
+[[language-server.jsonls.config.json.schemas]]
+fileMatch = ["tsconfig.json", "tsconfig.*.json"]
+url = "https://json.schemastore.org/tsconfig.json"
+
+[language-server.eslint.config]
+format = true
+nodePath = ""
+onIgnoredFiles = "off"
+packageManager = "yarn"
+quiet = false
+rulesCustomizations = []
+run = "onType"
+useESLintClass = false
+validate = "on"
+codeAction = { disableRuleComment = { enable = true, location = "separateLine" }, showDocumentation = { enable = true } }
+codeActionOnSave = { mode = "all" }
+experimental = {}
+problems = { shortenToSingleLine = false }
+workingDirectory = { mode = "auto" }
+
+[language-server.typescript-language-server.config.preferences]
+quotePreference = 'single'
+
+[language-server.typescript-language-server.config.typescript.inlayHints]
+includeInlayEnumMemberValueHints = false
+includeInlayFunctionLikeReturnTypeHints = false
+includeInlayFunctionParameterTypeHints = false
+includeInlayParameterNameHints = "none"
+includeInlayParameterNameHintsWhenArgumentMatchesName = false
+includeInlayPropertyDeclarationTypeHints = false
+includeInlayVariableTypeHints = false
+
+[language-server.typescript-language-server.config.completions]
+completeFunctionCalls = false
+
+[language-server.typescript-language-server.config.javascript.inlayHints]
+includeInlayEnumMemberValueHints = false
+includeInlayFunctionLikeReturnTypeHints = false
+includeInlayFunctionParameterTypeHints = false
+includeInlayParameterNameHints = "none"
+includeInlayParameterNameHintsWhenArgumentMatchesName = false
+includeInlayPropertyDeclarationTypeHints = false
+includeInlayVariableTypeHints = false
+
+# Language Configs ------------------------------------------------------------
+
+[[language]]
+name = "protobuf"
+scope = "source.proto"
+injection-regex = "proto"
+file-types = ["proto"]
+language-servers = [ "buf", "pbkit", "protols" ]
+comment-token = "//"
+block-comment-tokens = { start = "/*", end = "*/" }
+indent = { tab-width = 2, unit = "  " }
+grammar = "proto"
+
+[[language]]
+name = "rust"
+
+[[language]]
+name = "helm"
+indent = { tab-width = 2, unit = "  " }
+
+[[language]]
+name = "toml"
+scope = "source.toml"
+injection-regex = "toml"
+file-types = ["toml", { glob = "pdm.lock" }, { glob = "poetry.lock" }, { glob = "Cargo.lock" }, { glob = "uv.lock" }]
+comment-token = "#"
+language-servers = [ "taplo" ]
+indent = { tab-width = 2, unit = "  " }
+
+[[language]]
+name = "python"
+language-servers = ["pyright"]
+
+[[language]]
+name = "typescript"
+language-servers = [
+  { name = "typescript-language-server", except-features = ["format"] },
+  "eslint",
+  "biome-lsp"
+]
+# formatter = { command = 'npx', args = ["prettier", "--parser", "typescript"] }
+formatter = { command = 'npx', args = ["biome", "format", "--stdin-file-path", "buffer.ts"] }
+
+[[language]]
+name = "tsx"
+language-servers = [
+  { name = "typescript-language-server", except-features = ["format"] },
+  "eslint",
+  "tailwindcss-language-server",
+  "biome-lsp"
+]
+# formatter = { command = 'npx', args = ["prettier", "--parser", "typescript"] }
+formatter = { command = 'npx', args = ["biome", "format", "--stdin-file-path", "buffer.tsx"] }
+
+[[language]]
+name = "javascript"
+language-servers = [
+  { name = "typescript-language-server", except-features = ["format"] },
+  "eslint",
+  "biome-lsp"
+]
+# formatter = { command = 'npx', args = ["prettier", "--parser", "typescript"] }
+formatter = { command = 'npx', args = ["biome", "format", "--stdin-file-path", "buffer.js"] }
+
+[[language]]
+name = "jsx"
+language-servers = [
+  { name = "typescript-language-server", except-features = ["format"] },
+  "eslint",
+  "tailwindcss-language-server",
+  "biome-lsp"
+]
+grammar = "javascript"
+# formatter = { command = 'npx', args = ["prettier", "--parser", "typescript"] }
+formatter = { command = 'npx', args = ["biome", "format", "--stdin-file-path", "buffer.jsx"] }
+
+[[language]]
+name = "css"
+# formatter = { command = 'npx', args = ["prettier", "--parser", "css"] }
+formatter = { command = 'npx', args = ["biome", "format", "--stdin-file-path", "buffer.css"] }
+language-servers = ["vscode-css-language-server"]
+
+[[language]]
+name = "yaml"
+scope = "source.yaml"
+file-types = ["yml", "yaml"]
+comment-token = "#"
+indent = { tab-width = 2, unit = "  " }
+language-servers = ["yaml-language-server"]
+injection-regex = "yml|yaml"
+formatter = { command = 'npx', args = ["prettier", "--parser", "yaml"] }
+
+[[language]]
+name = "make"
+scope = "source.make"
+file-types = [{ glob = "Makefile" }, { glob = "makefile" }, "make", "mk", "mak", {glob = "GNUmakefile" }, { glob = "OCamlMakefile" }]
+shebangs = ["make", "gmake"]
+injection-regex = "(make|makefile|Makefile|mk)"
+comment-token = "#"
+indent = { tab-width = 4, unit = "\t" }
+
+[[language]]
+name = "go"
+scope = "source.go"
+injection-regex = "go"
+file-types = ["go"]
+roots = ["go.work", "go.mod"]
+auto-format = false
+comment-token = "//"
+block-comment-tokens = { start = "/*", end = "*/" }
+language-servers = ["gopls", "golangci-lint-lsp"]
+indent = { tab-width = 4, unit = "\t" }
+formatter = { command = "goimports" }
+
+[[language]]
+name = "starlark"
+scope = "source.starlark"
+injection-regex = "(starlark|bzl|bazel)"
+file-types = ["bzl", "bazel", "BUILD", "BUILD.bazel", "WORKSPACE", "WORKSPACE.bazel"]
+comment-token = "#"
+indent = { tab-width = 4, unit = "    " }
+roots = ["WORKSPACE", "WORKSPACE.bazel"]
+
+[[language]]
+name = "starlark"
+language-servers = ["bazel-lsp"]
+formatter = { command = "buildifier", args = ["-"] }
+auto-format = false

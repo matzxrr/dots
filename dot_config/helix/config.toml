@@ -1,0 +1,64 @@
+theme = "my_theme"
+
+[editor]
+line-number = "relative"
+mouse = false
+scrolloff = 8
+undercurl = true
+cursorline = true
+true-color = true
+color-modes = true
+rulers = [80]
+bufferline = "always"
+end-of-line-diagnostics = "hint"
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
+other-lines = "disable"
+prefix-len = 3
+max-wrap = 10
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+auto-signature-help = false
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name"]
+right = ["diagnostics", "selections", "position", "file-encoding", "file-line-ending", "file-type"]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.gutters]
+layout = ["diff", "diagnostics", "line-numbers", "spacer", "spacer"]
+
+[editor.indent-guides]
+render = true
+character = "▏"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+
+[editor.file-picker]
+hidden = false
+
+[keys.insert]
+up = "no_op"
+down = "no_op"
+left = "no_op"
+right = "no_op"
+
+[keys.normal]
+up = "no_op"
+down = "no_op"
+left = "no_op"
+right = "no_op"
+
+[keys.normal."space"]
+"c" = ":buffer-close"
+"f" = "file_picker_in_current_directory"
+"F" = "file_picker"
