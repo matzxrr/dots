@@ -19,7 +19,6 @@ HISTCONTROL=ignoreboth:erasedups
 # ----------------------------------------------------------------------
 # PATH
 # ----------------------------------------------------------------------
-export PATH="/opt/diff-so-fancy:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:$HOME/go/bin"
@@ -27,14 +26,8 @@ export PATH="$PATH:$HOME/go/bin"
 # ----------------------------------------------------------------------
 # Environment
 # ----------------------------------------------------------------------
-export EDITOR=hx
-export HELIX_RUNTIME="$HOME/helix/runtime"
+export EDITOR=vim
 export GPG_TTY=$(tty)
-
-# ----------------------------------------------------------------------
-# Work commands (only present on work machines)
-# ----------------------------------------------------------------------
-[ -f "$HOME/.ie" ] && . "$HOME/.ie"
 
 # ----------------------------------------------------------------------
 # Tool init

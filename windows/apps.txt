@@ -1,0 +1,33 @@
+# Windows apps to install via winget
+# Lines starting with # are comments, blank lines are ignored.
+# Run: .\install.ps1 from a PowerShell window.
+
+# Editor
+Zed.Zed
+
+# Terminal
+Alacritty.Alacritty
+Microsoft.WindowsTerminal
+
+# Dev tools
+Git.Git
+GitHub.cli
+
+# Password manager
+AgileBits.1Password
+AgileBits.1Password.CLI
+
+# AI
+Anthropic.Claude
+
+# Comms
+Microsoft.Teams
+SlackTechnologies.Slack
+Discord.Discord
+
+# Productivity
+Obsidian.Obsidian
+
+# Browsers
+Google.Chrome
+Mozilla.Firefox
