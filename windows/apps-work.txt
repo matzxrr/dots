@@ -1,0 +1,3 @@
+# Additional apps for work machines only.
+# Lines starting with # are comments, blank lines are ignored.
+# (No work-specific apps at the moment.)

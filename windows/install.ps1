@@ -1,24 +1,58 @@
 # Install Windows apps via winget and deploy WSL-side configs to Windows.
-# Usage: from PowerShell, run:
-#   .\install.ps1
+# Usage: from PowerShell, run one of:
+#   .\install.ps1                    # auto-detect profile from chezmoi
+#   .\install.ps1 -Profile personal
+#   .\install.ps1 -Profile work
+
+param(
+    [ValidateSet("personal", "work")]
+    [string]$Profile
+)
 
 $ErrorActionPreference = "Stop"
 
 # ---------------------------------------------------------------------
-# 1. Install apps via winget
+# 0. Resolve WSL paths (used for both profile detection and config deploy)
 # ---------------------------------------------------------------------
-$appsFile = Join-Path $PSScriptRoot "apps.txt"
+$wslDistro = "Ubuntu"
+$wslUser = (wsl -d $wslDistro --exec whoami).Trim()
+$wslHome = "\\wsl$\$wslDistro\home\$wslUser"
+$wslConfig = "$wslHome\.config"
 
-if (-not (Test-Path $appsFile)) {
-    Write-Error "apps.txt not found at $appsFile"
-    exit 1
+# ---------------------------------------------------------------------
+# 1. Determine profile (personal vs work)
+# ---------------------------------------------------------------------
+if (-not $Profile) {
+    $chezmoiToml = "$wslConfig\chezmoi\chezmoi.toml"
+    if (Test-Path $chezmoiToml) {
+        $match = Select-String -Path $chezmoiToml -Pattern '^\s*machine\s*=\s*"([^"]+)"'
+        if ($match) {
+            $machineType = $match.Matches[0].Groups[1].Value
+            $Profile = if ($machineType -like "work-*") { "work" } else { "personal" }
+            Write-Host "==> Detected profile: $Profile (chezmoi machine = $machineType)" -ForegroundColor Cyan
+        }
+    }
+    if (-not $Profile) {
+        Write-Error "Could not detect profile. Run with -Profile personal or -Profile work."
+        exit 1
+    }
 }
 
-$apps = Get-Content $appsFile |
-    Where-Object { $_ -and ($_ -notmatch '^\s*#') } |
-    ForEach-Object { $_.Trim() }
+# ---------------------------------------------------------------------
+# 2. Install apps via winget (base + profile-specific)
+# ---------------------------------------------------------------------
+function Read-AppList($path) {
+    if (-not (Test-Path $path)) { return @() }
+    Get-Content $path |
+        Where-Object { $_ -and ($_ -notmatch '^\s*#') } |
+        ForEach-Object { $_.Trim() }
+}
 
-Write-Host "==> Installing $($apps.Count) apps via winget" -ForegroundColor Cyan
+$baseApps = Read-AppList (Join-Path $PSScriptRoot "apps-base.txt")
+$extraApps = Read-AppList (Join-Path $PSScriptRoot "apps-$Profile.txt")
+$apps = @($baseApps) + @($extraApps)
+
+Write-Host "==> Installing $($apps.Count) apps via winget ($($baseApps.Count) base + $($extraApps.Count) $Profile)" -ForegroundColor Cyan
 
 foreach ($app in $apps) {
     Write-Host ""
@@ -27,15 +61,10 @@ foreach ($app in $apps) {
 }
 
 # ---------------------------------------------------------------------
-# 2. Deploy WSL-side configs to Windows %APPDATA%
+# 3. Deploy WSL-side configs to Windows %APPDATA%
 # ---------------------------------------------------------------------
 Write-Host ""
 Write-Host "==> Deploying configs from WSL" -ForegroundColor Cyan
-
-# Adjust this if your WSL distro or username differs
-$wslDistro = "Ubuntu"
-$wslUser = "matzxrr"
-$wslConfig = "\\wsl$\$wslDistro\home\$wslUser\.config"
 
 if (-not (Test-Path $wslConfig)) {
     Write-Warning "WSL config path not found: $wslConfig"

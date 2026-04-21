@@ -1,0 +1,5 @@
+# Additional apps for personal machines only.
+# Lines starting with # are comments, blank lines are ignored.
+
+# Comms
+Discord.Discord

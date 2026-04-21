@@ -30,14 +30,30 @@ cd $env:USERPROFILE\dots\windows
 (When WSL is set up first and you want to avoid a second clone.)
 
 ```powershell
-cd \\wsl$\Ubuntu\home\matzxrr\.local\share\chezmoi\windows
+cd \\wsl$\Ubuntu\home\$(wsl -d Ubuntu --exec whoami)\.local\share\chezmoi\windows
 .\install.ps1
 ```
 
-## Editing the app list
+## Profiles (personal vs work)
 
-Apps live in `apps.txt` — one winget package ID per line. Lines starting
-with `#` are comments. To find a package ID:
+The installer reads two app lists and concatenates them:
+
+- `apps-base.txt` — installed on every machine
+- `apps-<profile>.txt` — installed only for that profile (`personal` or `work`)
+
+If you run `.\install.ps1` with no arguments, the profile is auto-detected
+from `~/.config/chezmoi/chezmoi.toml` on the WSL side (`machine = "work-*"`
+→ `work`, else `personal`). Override with `-Profile`:
+
+```powershell
+.\install.ps1 -Profile personal
+.\install.ps1 -Profile work
+```
+
+## Editing app lists
+
+One winget package ID per line. Lines starting with `#` are comments.
+To find a package ID:
 
 ```powershell
 winget search <app-name>
@@ -55,10 +71,11 @@ winget search <app-name>
 
 ## What the installer does
 
-`install.ps1` does two things:
+`install.ps1` does three things:
 
-1. Installs every app listed in `apps.txt` via `winget install`
-2. Copies configs from WSL to Windows `%APPDATA%`:
+1. Resolves the profile (either via `-Profile` flag or auto-detect from chezmoi)
+2. Installs `apps-base.txt` + `apps-<profile>.txt` via `winget install`
+3. Copies configs from WSL to Windows `%APPDATA%`:
    - `~/.config/alacritty/` → `%APPDATA%\alacritty\`
    - `~/.config/zed/`       → `%APPDATA%\Zed\`
 
