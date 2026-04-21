@@ -85,4 +85,16 @@ if ! command -v claude >/dev/null 2>&1; then
     curl -fsSL https://claude.ai/install.sh | bash
 fi
 
+# ---- THEMES ---------------------------------------------------------
+
+# Catppuccin Mocha theme for bat
+BAT_THEME_DIR="$(bat --config-dir)/themes"
+if [ ! -f "$BAT_THEME_DIR/Catppuccin Mocha.tmTheme" ]; then
+    echo "--> installing catppuccin theme for bat"
+    mkdir -p "$BAT_THEME_DIR"
+    curl -fsSLo "$BAT_THEME_DIR/Catppuccin Mocha.tmTheme" \
+        "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme"
+    bat cache --build
+fi
+
 echo "==> Packages installed"

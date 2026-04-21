@@ -1,59 +1,98 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-format = """
-[╭─](silver) $username$hostname$directory$git_branch$git_status
-[╰](silver) $character"""
-
+palette = "catppuccin_mocha"
 add_newline = true
 
-palette = "catppuccin_mocha"
+format = """
+$os\
+$username\
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$rust\
+$golang\
+$python\
+$cmd_duration
+$character"""
 
-[character]
-success_symbol = ""
-error_symbol = "[](red)"
-vicmd_symbol = "[](mauve)"
+[os]
+disabled = false
+format = '[](fg:mauve)[$symbol](bg:mauve fg:base)[](fg:mauve) '
+
+[os.symbols]
+Ubuntu = ""
+Debian = ""
+Linux = ""
+Macos = ""
+Windows = ""
+Arch = ""
+Alpine = ""
+Fedora = ""
+Redhat = ""
 
 [username]
 show_always = true
-style_user = "yellow"
-style_root = "red bold"
-format = "[ $user ](yellow)"
-
-[hostname]
-ssh_only = true
-style = "purple"
-format = "[at  $hostname ](purple)[in ](teal)"
+style_user = "bg:peach fg:base"
+style_root = "bg:red fg:base bold"
+format = '[](fg:peach)[ $user]($style)[](fg:peach) '
 
 [directory]
-style = "red"
-format = "[ $path ](red)"
+format = '[](fg:yellow)[  $path](bg:yellow fg:base)[](fg:yellow) '
 truncate_to_repo = false
-truncation_length = 5
+truncation_length = 3
 truncation_symbol = "…/"
+read_only = " "
+read_only_style = "bg:yellow fg:red"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+"~/work" = "󰒱 ~/work"
 
 [git_branch]
 symbol = ""
-style = "yellow"
-format = "[on ](teal)[$symbol $branch](yellow)"
+format = '[](fg:green)[$symbol $branch](bg:green fg:base)'
 
 [git_status]
-style = "cyan"
-format = "[$all_status$ahead_behind](cyan)"
-modified = "*"
-untracked = "?"
-stashed = "\\$"
-staged = "+"
-renamed = "»"
-deleted = "✘"
-conflicted = "!"
+format = '[$all_status$ahead_behind](bg:green fg:base)[](fg:green) '
+modified = " "
+untracked = " "
+stashed = " "
+staged = " "
+renamed = " »"
+deleted = " "
+conflicted = " "
 ahead = " ⇡${count}"
 behind = " ⇣${count}"
 diverged = " ⇕⇡${ahead_count}⇣${behind_count}"
 
+[nodejs]
+symbol = ""
+format = '[](fg:teal)[ $symbol $version](bg:teal fg:base)[](fg:teal) '
+
+[rust]
+symbol = ""
+format = '[](fg:teal)[ $symbol $version](bg:teal fg:base)[](fg:teal) '
+
+[golang]
+symbol = ""
+format = '[](fg:teal)[ $symbol $version](bg:teal fg:base)[](fg:teal) '
+
+[python]
+symbol = ""
+format = '[](fg:teal)[ $symbol $version](bg:teal fg:base)[](fg:teal) '
+
 [cmd_duration]
-min_time = 2_000
-style = "overlay2"
-format = "[took $duration ](overlay2)"
+min_time = 500
+format = '[  $duration ](fg:overlay2)'
+
+[character]
+success_symbol = "[❯](bold fg:mauve)"
+error_symbol = "[❯](bold fg:red)"
+vicmd_symbol = "[❮](bold fg:green)"
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
