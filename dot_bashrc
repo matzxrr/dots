@@ -23,6 +23,15 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:$HOME/go/bin"
 
+# Zed ships a WSL-aware shell wrapper at <install>/bin/zed — add it to PATH
+# so `zed .` opens the current WSL folder in Zed via its remote mode.
+if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+    for _zed_bin in /mnt/c/Users/*/AppData/Local/Programs/Zed/bin; do
+        [ -d "$_zed_bin" ] && export PATH="$PATH:$_zed_bin" && break
+    done
+    unset _zed_bin
+fi
+
 # ----------------------------------------------------------------------
 # Environment
 # ----------------------------------------------------------------------
