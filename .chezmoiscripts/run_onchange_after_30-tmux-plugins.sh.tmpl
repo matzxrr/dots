@@ -1,0 +1,16 @@
+#!/bin/bash
+# Sync tmux plugins when the plugin list in tmux.conf changes.
+# tmux.conf hash: {{ include "dot_config/tmux/tmux.conf" | sha256sum }}
+set -euo pipefail
+
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    echo "==> tpm not installed, skipping tmux plugin sync"
+    exit 0
+fi
+
+echo "==> Syncing tmux plugins"
+tmux new-session -d -s _chezmoi_tpm
+tmux set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.tmux/plugins/"
+"$HOME/.tmux/plugins/tpm/bin/install_plugins"
+"$HOME/.tmux/plugins/tpm/bin/clean_plugins"
+tmux kill-session -t _chezmoi_tpm

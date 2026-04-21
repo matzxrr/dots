@@ -32,4 +32,10 @@ if ! command -v go >/dev/null 2>&1; then
     rm /tmp/go.tar.gz
 fi
 
+# Tmux plugin manager (plugins themselves are synced by run_onchange_after_30-tmux-plugins)
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    echo "--> installing tpm"
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+fi
+
 echo "==> Bootstrap complete"
