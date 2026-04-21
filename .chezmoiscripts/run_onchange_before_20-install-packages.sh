@@ -13,7 +13,6 @@ APT_PACKAGES=(
     gnupg
     tmux
     vim
-    bat
     ripgrep
     fd-find
     jq
@@ -44,6 +43,7 @@ fi
 . "$HOME/.cargo/env"
 
 CARGO_PACKAGES=(
+    bat            # syntax-highlighting cat (also bundles catppuccin themes used by delta)
     git-delta      # better git diff pager
     just           # command runner
     starship       # prompt
@@ -83,18 +83,6 @@ done
 if ! command -v claude >/dev/null 2>&1; then
     echo "--> installing claude code"
     curl -fsSL https://claude.ai/install.sh | bash
-fi
-
-# ---- THEMES ---------------------------------------------------------
-
-# Catppuccin Mocha theme for bat
-BAT_THEME_DIR="$(bat --config-dir)/themes"
-if [ ! -f "$BAT_THEME_DIR/Catppuccin Mocha.tmTheme" ]; then
-    echo "--> installing catppuccin theme for bat"
-    mkdir -p "$BAT_THEME_DIR"
-    curl -fsSLo "$BAT_THEME_DIR/Catppuccin Mocha.tmTheme" \
-        "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme"
-    bat cache --build
 fi
 
 echo "==> Packages installed"
