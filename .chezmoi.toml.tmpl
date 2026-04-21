@@ -1,13 +1,8 @@
 {{- $machine := promptChoiceOnce . "machine" "Machine type" (list "personal" "work-blade" "work-laptop") -}}
-{{- $gpgKey := promptStringOnce . "gpg_key" "Personal GPG signing key" "AA1C7ADD08D44AE0" -}}
+{{- $gpgKey := promptStringOnce . "gpg_key" "GPG signing key" -}}
 {{- $isWork := or (eq $machine "work-blade") (eq $machine "work-laptop") -}}
-{{- $workGpgKey := "" -}}
-{{- if $isWork -}}
-{{-   $workGpgKey = promptStringOnce . "work_gpg_key" "Work GPG signing key" -}}
-{{- end -}}
 
 [data]
   machine = {{ $machine | quote }}
   gpg_key = {{ $gpgKey | quote }}
   is_work = {{ $isWork }}
-  work_gpg_key = {{ $workGpgKey | quote }}
