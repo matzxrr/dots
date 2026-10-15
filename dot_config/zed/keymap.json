@@ -44,6 +44,35 @@
     }
   },
   {
+    "context": "Editor && showing_code_actions",
+    "bindings": {
+      "j": "editor::ContextMenuNext",
+      "k": "editor::ContextMenuPrevious"
+    }
+  },
+  {
+    // Completions show in insert mode, so plain j/k must still type
+    "context": "Editor && showing_completions",
+    "bindings": {
+      "ctrl-j": "editor::ContextMenuNext",
+      "ctrl-k": "editor::ContextMenuPrevious"
+    }
+  },
+  {
+    "context": "ContextMenu",
+    "bindings": {
+      "j": "menu::SelectNext",
+      "k": "menu::SelectPrevious"
+    }
+  },
+  {
+    "context": "Picker",
+    "bindings": {
+      "ctrl-j": "menu::SelectNext",
+      "ctrl-k": "menu::SelectPrevious"
+    }
+  },
+  {
     // Same panel toggles from the project panel so you can jump back out
     "context": "ProjectPanel && not_editing",
     "bindings": {

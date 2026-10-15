@@ -1,6 +1,6 @@
 {
     "auto_install_extensions": {
-        "snazzy": true,
+        "kanagawa-themes": true,
         "material-icon-theme": true,
         "git-firefly": true,
         "toml": true,
@@ -9,7 +9,7 @@
         "powershell": true,
         "groovy": true
     },
-    "theme": "Snazzy Theme - blurred",
+    "theme": "Kanagawa Wave",
     "icon_theme": "Material Icon Theme",
     "buffer_font_family": "MonaspiceNe Nerd Font Mono",
     "buffer_font_size": 14,
