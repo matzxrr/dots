@@ -82,10 +82,11 @@ Each machine stores its per-machine data at `~/.config/chezmoi/chezmoi.toml`:
 │   ├── lazygit/
 │   ├── starship.toml
 │   ├── tmux/
-│   └── zed/settings.json
+│   └── zed/                        → ~/.config/zed/ (mirrored to %APPDATA%\Zed on WSL)
 ├── .chezmoiscripts/
 │   ├── run_once_before_10-bootstrap.sh           # rustup, nvm, go
-│   └── run_onchange_before_20-install-packages.sh # apt, cargo, go, claude
+│   ├── run_onchange_before_20-install-packages.sh # apt, cargo, go, claude
+│   └── run_after_40-zed-windows.sh                # sync zed config to Windows on every apply
 ├── windows/
 │   ├── apps.txt                    # winget package IDs
 │   ├── install.ps1                 # winget bulk installer

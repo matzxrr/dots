@@ -1,0 +1,55 @@
+[
+  {
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
+    "bindings": {
+      "q": "vim::AnyQuotes",
+      "b": "vim::AnyBrackets",
+      "Q": "vim::MiniQuotes",
+      "B": "vim::MiniBrackets"
+    }
+  },
+  {
+    // Space leader — which-key shows the menu while a chord is pending
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
+    "bindings": {
+      // code
+      "space k": "editor::Hover",
+      "space a": "editor::ToggleCodeActions",
+      "space r": "editor::Rename",
+      "space =": "editor::Format",
+      "space d": "diagnostics::Deploy",
+
+      // find
+      "space f": "file_finder::Toggle",
+      "space /": "pane::DeploySearch",
+      "space s": "outline::Toggle",
+      "space S": "project_symbols::Toggle",
+      "space b": "tab_switcher::Toggle",
+      "space p": "command_palette::Toggle",
+
+      // panels
+      "space e": "project_panel::ToggleFocus",
+      "space t": "terminal_panel::ToggleFocus",
+      "space c": "agent::ToggleFocus",
+
+      // git
+      "space g g": "git_panel::ToggleFocus",
+      "space g b": "git::Blame",
+      "space g d": "git::Diff",
+
+      // buffers
+      "space w": "workspace::Save",
+      "space q": "pane::CloseActiveItem",
+      "space o": "workspace::CloseInactiveTabsAndPanes"
+    }
+  },
+  {
+    // Same panel toggles from the project panel so you can jump back out
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "space e": "project_panel::ToggleFocus",
+      "space f": "file_finder::Toggle",
+      "space /": "pane::DeploySearch"
+    }
+  }
+]
