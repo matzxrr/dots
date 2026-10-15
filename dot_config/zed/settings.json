@@ -17,6 +17,7 @@
 
     "vim_mode": true,
     "relative_line_numbers": "enabled",
+    "vertical_scroll_margin": 12,
     "which_key": {
         "enabled": true,
         "delay_ms": 0
